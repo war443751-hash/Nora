@@ -18,10 +18,15 @@ jobs:
         distribution: 'temurin'
 
     - name: Install Dependencies
-      run: npm install
+      run: |
+        if [ -d "noor-android" ]; then cd "noor-android"; fi
+        if [ -d "noor-android (1)" ]; then cd "noor-android (1)"; fi
+        npm install
 
     - name: Build Android App
       run: |
+        if [ -d "noor-android" ]; then cd "noor-android"; fi
+        if [ -d "noor-android (1)" ]; then cd "noor-android (1)"; fi
         npx cap sync android
         cd android && ./gradlew assembleRelease
 
@@ -29,4 +34,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Android-Release-APK
-        path: android/app/build/outputs/apk/release/*.apk
+        path: |
+          **/android/app/build/outputs/apk/release/*.apk
